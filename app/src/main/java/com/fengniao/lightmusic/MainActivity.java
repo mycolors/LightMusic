@@ -10,31 +10,44 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.fengniao.lightmusic.adapter.MusicListAdapter;
 import com.fengniao.lightmusic.model.MusicInfo;
-import com.fengniao.lightmusic.service.PlayMusicService;
+import com.fengniao.lightmusic.service.PlayService;
 import com.fengniao.lightmusic.utils.MusicUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.music_list)
     RecyclerView musicList;
+    @BindView(R.id.img_music)
+    ImageView imgMusic;
+    @BindView(R.id.text_music)
+    TextView textMusic;
+    @BindView(R.id.text_next)
+    TextView textNext;
+    @BindView(R.id.text_play)
+    TextView textPlay;
+    @BindView(R.id.text_stop)
+    TextView textStop;
     private List<MusicInfo> mList;
-    private MediaPlayer mediaPlayer = new MediaPlayer();
-    private PlayMusicService.PlayMusicBinder mBinder;
+    private PlayService.PlayMusicBinder mBinder;
+    //当前模仿位置，默认为0
+    private int currentPositon;
 
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mBinder = (PlayMusicService.PlayMusicBinder) service;
-            Log.i("tag", "bind");
+            mBinder = (PlayService.PlayMusicBinder) service;
+            Log.i("tag", "tag");
         }
 
         @Override
@@ -47,16 +60,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, PlayMusicService.class);
-        startService(intent);
-//        bindService(intent, connection, BIND_AUTO_CREATE);
-        ButterKnife.bind(this);
+        Intent intent = new Intent(this, PlayService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
+        initView();
         initData();
+    }
+
+    public void initView() {
+        ButterKnife.bind(this);
+//        if (mBinder.isPlaying())
+//            textPlay.setText("暂停");
+//        else
+//            textPlay.setText("播放");
     }
 
 
     public void initData() {
         mList = MusicUtils.getMusicData(this);
+//        mBinder.setMusicList(mList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         MusicListAdapter adapter = new MusicListAdapter(this, mList);
         musicList.setLayoutManager(manager);
@@ -64,24 +85,27 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new MusicListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-//                initMediaPlayer(mList.get(position).getPath());
-//                mBinder.play(mList.get(position).getPath());
-
+                if (currentPositon == position) {
+                    return;
+                }
+                mBinder.setPositon(position);
+                mBinder.play();
+                textMusic.setText(mList.get(position).getTitle());
+                currentPositon = position;
             }
         });
     }
 
-    private void initMediaPlayer(String path) {
-
-        try {
-            mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+    @OnClick(R.id.text_play)
+    public void playOrPause(View view) {
+        if (mBinder.isPlaying()) {
+            mBinder.pause();
+            textPlay.setText("播放");
+        } else {
+            mBinder.play();
+            textPlay.setText("暂停");
         }
     }
-
 
     @Override
     protected void onDestroy() {

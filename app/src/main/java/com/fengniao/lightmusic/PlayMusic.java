@@ -5,7 +5,7 @@ package com.fengniao.lightmusic;
  */
 
 public interface PlayMusic {
-    void play(String path);
+    void play();
 
     void pause();
 
