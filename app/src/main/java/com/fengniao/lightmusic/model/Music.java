@@ -3,11 +3,7 @@ package com.fengniao.lightmusic.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by a1 on 2017/2/22.
- */
-
-public class MusicInfo implements Parcelable {
+public class Music implements Parcelable {
     private long id;
     private String title;
     private String album;
@@ -89,10 +85,10 @@ public class MusicInfo implements Parcelable {
         dest.writeString(path);
     }
 
-    public MusicInfo() {
+    public Music() {
     }
 
-    public MusicInfo(Parcel in) {
+    public Music(Parcel in) {
         this.id = in.readInt();
         this.title = in.readString();
         this.album = in.readString();
@@ -102,15 +98,15 @@ public class MusicInfo implements Parcelable {
         this.path = in.readString();
     }
 
-    public static final Creator<MusicInfo> CREATOR = new Creator<MusicInfo>() {
+    public static final Creator<Music> CREATOR = new Creator<Music>() {
         @Override
-        public MusicInfo createFromParcel(Parcel source) {
-            return new MusicInfo(source);
+        public Music createFromParcel(Parcel source) {
+            return new Music(source);
         }
 
         @Override
-        public MusicInfo[] newArray(int size) {
-            return new MusicInfo[size];
+        public Music[] newArray(int size) {
+            return new Music[size];
         }
     };
 
