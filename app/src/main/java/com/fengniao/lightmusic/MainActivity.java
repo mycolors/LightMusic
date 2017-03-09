@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
     public void stop(View view) {
         try {
             mMusicManager.stop();
+            textPlay.setText("播放");
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(connection);
-        mHandler.getLooper().quit();
+        mHandler.removeCallbacks(runnable);
         mHandler = null;
     }
 }
