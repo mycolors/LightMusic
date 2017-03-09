@@ -14,4 +14,10 @@ public interface PlayMusic {
     void next();
 
     void last();
+
+    void seekTo(int time);
+
+    int getDuration();
+
+    int getCurrentTime();
 }

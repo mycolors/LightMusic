@@ -1,53 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.fengniao.lightmusic.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/music_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <LinearLayout
+    <ProgressBar
+        android:id="@+id/pro_music"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
-        android:gravity="center_vertical"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:layout_height="2dp"
+        android:indeterminate="false"
+        android:max="100" />
 
-        <ImageView
-            android:id="@+id/img_music"
-            android:layout_width="64dp"
-            android:layout_height="64dp" />
+    <include layout="@layout/item_play_music_bottom" />
 
-        <TextView
-            android:id="@+id/text_music"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/text_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="停止" />
-
-        <TextView
-            android:id="@+id/text_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:text="播放" />
-
-        <TextView
-            android:id="@+id/text_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:text="下一曲" />
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

@@ -11,6 +11,7 @@ public class Music implements Parcelable {
     private long size;
     private String artist;
     private String path;
+    private long albumId;
 
     public long getId() {
         return id;
@@ -68,11 +69,18 @@ public class Music implements Parcelable {
         this.path = path;
     }
 
+    public long getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(long albumId) {
+        this.albumId = albumId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
-
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -83,19 +91,21 @@ public class Music implements Parcelable {
         dest.writeLong(size);
         dest.writeString(artist);
         dest.writeString(path);
+        dest.writeLong(albumId);
     }
 
     public Music() {
     }
 
     public Music(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readLong();
         this.title = in.readString();
         this.album = in.readString();
         this.duration = in.readInt();
         this.size = in.readLong();
         this.artist = in.readString();
         this.path = in.readString();
+        this.albumId = in.readLong();
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
