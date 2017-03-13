@@ -3,23 +3,18 @@ package com.fengniao.lightmusic.service;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.fengniao.lightmusic.MusicManager;
-import com.fengniao.lightmusic.PlayMusic;
+import com.fengniao.lightmusic.PlayMusicI;
 import com.fengniao.lightmusic.model.Music;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 
-public class PlayService extends Service implements PlayMusic {
+public class PlayService extends Service implements PlayMusicI {
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private Music music;
     private boolean isFirstPlay = true;

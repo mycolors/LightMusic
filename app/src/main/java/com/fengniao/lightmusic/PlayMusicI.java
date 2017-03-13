@@ -4,7 +4,7 @@ package com.fengniao.lightmusic;
  * Created by a1 on 2017/2/22.
  */
 
-public interface PlayMusic {
+public interface PlayMusicI {
     void play();
 
     void pause();
