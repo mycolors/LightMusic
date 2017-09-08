@@ -1,13 +1,11 @@
 package com.fengniao.lightmusic.utils;
 
-/**
- * Created by a1 on 2017/2/22.
- */
 
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.fengniao.lightmusic.model.Music;
 
@@ -28,13 +26,16 @@ public class MusicUtils {
                 null, MediaStore.Audio.AudioColumns.IS_MUSIC);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                Music info = new Music();
-                info.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
-                info.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
-                info.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
-                info.setDuration(cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
-                info.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)));
-                info.setAlbumId(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)));
+                int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+                if (duration > 180000) {
+                    Music info = new Music();
+                    info.setArtist(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)));
+                    info.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)));
+                    info.setPath(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)));
+                    info.setDuration(duration);
+                    info.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)));
+                    info.setAlbumId(cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)));
+
 
 //                if (song.size > 1000 * 800) {
 //                    // 注释部分是切割标题，分离出歌曲名和歌手 （本地媒体库读取的歌曲信息不规范）
@@ -43,7 +44,9 @@ public class MusicUtils {
 //                        song.singer = str[0];
 //                        song.song = str[1];
 //                    }
-                list.add(info);
+                    list.add(info);
+                }
+
             }
             cursor.close();
         }
@@ -53,6 +56,7 @@ public class MusicUtils {
     /**
      * 定义一个方法用来格式化获取到的时间
      */
+
     public static String formatTime(int time) {
         if (time / 1000 % 60 < 10) {
             return time / 1000 / 60 + ":0" + time / 1000 % 60;

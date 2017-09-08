@@ -1,8 +1,11 @@
-package com.fengniao.lightmusic.palymusic;
+package com.fengniao.lightmusic.playmusic;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,6 +34,8 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
 
     private int currentPosition;
 
+    private PlayComletedReceiver receiver;
+
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -52,7 +57,6 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
 
     public PlayMusicPresenter(PlayMusic.View mView) {
         this.mView = mView;
-        mMusicManager = mView.getMusicManager();
         mView.setPresenter(this);
         start();
     }
@@ -63,6 +67,11 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
         Intent intent = new Intent(getActivity(), PlayService.class);
         getActivity().startService(intent);
         getActivity().bindService(intent, connection, BIND_AUTO_CREATE);
+
+        receiver = new PlayComletedReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.fengniao.broadcast.PLAY_COMPLETE");
+        getActivity().registerReceiver(receiver, intentFilter);
     }
 
     @Override
@@ -120,8 +129,8 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
     }
 
 
-    android.os.Handler mHandler = new android.os.Handler();
-    Runnable runnable = new Runnable() {
+    private android.os.Handler mHandler = new android.os.Handler();
+    private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             mHandler.postDelayed(runnable, 500);
@@ -157,6 +166,7 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
         String album = getAlbumArt((int) mList.get(position).getAlbumId());
         Bitmap bm = BitmapFactory.decodeFile(album);
         mView.showMusicPic(bm);
+        mView.showHeaderPic(bm);
     }
 
     @Override
@@ -180,6 +190,7 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
         getActivity().unbindService(connection);
         mHandler.removeCallbacks(runnable);
         mHandler = null;
+        getActivity().unregisterReceiver(receiver);
     }
 
     @Override
@@ -201,11 +212,23 @@ public class PlayMusicPresenter implements PlayMusic.Presenter {
                 Uri.parse(mUriAlbums + "/" + Integer.toString(album_id)),
                 projection, null, null, null);
         String album_art = null;
+        assert cur != null;
         if (cur.getCount() > 0 && cur.getColumnCount() > 0) {
             cur.moveToNext();
             album_art = cur.getString(0);
         }
         cur.close();
         return album_art;
+    }
+
+    public class PlayComletedReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("tag", "test");
+//            next();
+        }
+
+
     }
 }

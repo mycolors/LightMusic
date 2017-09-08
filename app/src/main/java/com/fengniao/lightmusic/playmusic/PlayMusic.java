@@ -1,11 +1,9 @@
-package com.fengniao.lightmusic.palymusic;
+package com.fengniao.lightmusic.playmusic;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.fengniao.lightmusic.MusicManager;
 import com.fengniao.lightmusic.base.BasePresenter;
 import com.fengniao.lightmusic.base.BaseView;
 import com.fengniao.lightmusic.model.Music;
@@ -18,9 +16,9 @@ public interface PlayMusic {
 
         void showMusicProgress(int schedule);
 
-        MusicManager getMusicManager();
-
         void showMusicPic(Bitmap bm);
+
+        void showHeaderPic(Bitmap bm);
 
         void showMusicEndToast();
 
@@ -44,7 +42,6 @@ public interface PlayMusic {
         void updateSchedule();
 
         void setMusicPic(int id);
-
 
         void itemClick(int position);
 

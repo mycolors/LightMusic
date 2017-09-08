@@ -128,6 +128,14 @@ public class PlayService extends Service implements PlayMusicI {
         } else {
             mediaPlayer.start();
         }
+//
+//        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+////                Intent intent = new Intent("com.fengniao.broadcast.PLAY_COMPLETE");
+////                sendBroadcast(intent);
+//            }
+//        });
     }
 
     @Override

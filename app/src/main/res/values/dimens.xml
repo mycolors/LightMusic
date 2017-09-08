@@ -7,4 +7,5 @@
     <dimen name="view_padding">16dp</dimen>
     <dimen name="view_padding_small">10dp</dimen>
     <dimen name="font_size_big">20sp</dimen>
+    <dimen name="status_bar_height">0dp</dimen>
 </resources>
